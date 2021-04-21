@@ -6,7 +6,9 @@ from board import *
 from gameView import *
 from player import *
 from heuristicAIPlayer import *
+from randomPlayer import *
 import queue
+import math
 import numpy as np
 import sys, pygame
 import matplotlib.pyplot as plt
@@ -15,26 +17,18 @@ import matplotlib.pyplot as plt
 class catanAIGame():
     #Create new gameboard
     def __init__(self):
-        print("Initializing Settlers of Catan with only AI Players...")
         self.board = catanBoard()
 
         #Game State variables
         self.gameOver = False
         self.maxPoints = 10
-        self.numPlayers = 0
+        self.numPlayers = 2
+
+        print("Initializing game...")
 
         #Dictionary to keep track of dice statistics
         self.diceStats = {2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0, 10:0, 11:0, 12:0}
         self.diceStats_list = []
-
-        while(self.numPlayers not in [3,4]): #Only accept 3 and 4 player games
-            try:
-                self.numPlayers = int(input("Enter Number of Players (3 or 4):"))
-            except:
-                print("Please input a valid number")
-
-        print("Initializing game with {} players...".format(self.numPlayers))
-        print("Note that Player 1 goes first, Player 2 second and so forth.")
         
         #Initialize blank player queue and initial set up of roads + settlements
         self.playerQueue = queue.Queue(self.numPlayers)
@@ -57,10 +51,10 @@ class catanAIGame():
     #Function to initialize players + build initial settlements for players
     def build_initial_settlements(self):
         #Initialize new players with names and colors
-        playerColors = ['black', 'darkslateblue', 'magenta4', 'orange1']
+        playerNames = ['Random', 'MCTS']
+        playerColors = ['red', 'blue']
         for i in range(self.numPlayers):
-            playerNameInput = input("Enter AI Player {} name: ".format(i+1))
-            newPlayer = heuristicAIPlayer(playerNameInput, playerColors[i])
+            newPlayer = randomPlayer(playerNames[i], playerColors[i])
             newPlayer.updateAI()
             self.playerQueue.put(newPlayer)
 
@@ -228,23 +222,18 @@ class catanAIGame():
                     
                     #Check if game is over
                     if currPlayer.victoryPoints >= self.maxPoints:
-                        self.gameOver = True
                         self.turnOver = True
-                        print("====================================================")
-                        print("PLAYER {} WINS IN {} TURNS!".format(currPlayer.name, int(numTurns/4)))
-                        print(self.diceStats)
-                        print("Exiting game in 10 seconds...")
-                        pygame.time.delay(10000)
-                        break
-
-                if(self.gameOver):
-                    startTime = pygame.time.get_ticks()
-                    runTime = 0
-                    while(runTime < 5000): #5 second delay prior to quitting
-                        runTime = pygame.time.get_ticks() - startTime
-
+                        self.gameOver = True
+                        
+                if self.gameOver:
+                    print("====================================================")
+                    print("PLAYER {} WINS!".format(currPlayer.name))
+                    print(self.diceStats)
+                    print("Exiting game in 5 seconds...")
+                    pygame.time.delay(5000)
+                    self.boardView.quitGameScreen()
+                    pygame.quit()
                     break
-                                   
 
 #Initialize new game and run
 newGame_AI = catanAIGame()

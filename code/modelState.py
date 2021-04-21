@@ -2,8 +2,8 @@
 #Settlers of Catan, 2020
 
 # #Imports
+from AIGame import *
 from board import *
-from catanGame import *
 from player import *
 from heuristicAIPlayer import *
 

@@ -17,11 +17,11 @@ class catanGameView():
         # #Use pygame to display the board
         self.screen = pygame.display.set_mode(self.board.size)
         pygame.display.set_caption('Settlers of Catan')
-        self.font_resource = pygame.font.SysFont('cambria', 15)
-        self.font_ports = pygame.font.SysFont('cambria', 12)
+        self.font_resource = pygame.font.SysFont('georgia', 15)
+        self.font_ports = pygame.font.SysFont('georgia', 12)
 
-        self.font_button = pygame.font.SysFont('cambria', 12)
-        self.font_diceRoll = pygame.font.SysFont('cambria', 25) #dice font
+        #self.font_button = pygame.font.SysFont('arialrounded', 12)
+        #self.font_diceRoll = pygame.font.SysFont('georgia', 25) #dice font
         self.font_Robber = pygame.font.SysFont('arialblack', 50) #robber font
 
         return None
@@ -29,9 +29,9 @@ class catanGameView():
 
     #Function to display the initial board
     def displayInitialBoard(self):
-        #Dictionary to store RGB Color values
-        colorDict_RGB = {"BRICK":(255,51,51), "ORE":(128, 128, 128), "WHEAT":(255,255,51), "WOOD":(0,153,0), "SHEEP":(51,255,51), "DESERT":(255,255,204)}
-        pygame.draw.rect(self.screen, pygame.Color('royalblue2'), (0,0,self.board.width, self.board.height)) #blue background
+        #Dictionary to store RGB Color values - new and improved!
+        colorDict_RGB = {"BRICK":(196,84,18), "ORE":(195,179,169), "WHEAT":(228,158,32), "WOOD":(59,122,48), "SHEEP":(120,179,31), "DESERT":(250,235,150)}
+        pygame.draw.rect(self.screen, pygame.Color(22,145,198), (0,0,self.board.width, self.board.height)) #blue background
 
         #Render each hexTile
         for hexTile in self.board.hexTileDict.values():
@@ -102,8 +102,7 @@ class catanGameView():
         possiblePlayer = pygame.draw.circle(self.screen, pygame.Color('black'), (int(vertexCoord.x), int(vertexCoord.y)), 35, 5)
         return possiblePlayer
         
-
-    #Function to render basic gameplay buttons
+    """#Function to render basic gameplay buttons
     def displayGameButtons(self):
         #Basic GamePlay Buttons
         diceRollText = self.font_button.render("ROLL DICE", False, (0,0,0))
@@ -112,7 +111,7 @@ class catanGameView():
         buildCityText = self.font_button.render("CITY", False, (0,0,0))
         endTurnText = self.font_button.render("END TURN", False, (0,0,0))
         devCardText = self.font_button.render("DEV CARD", False, (0,0,0))
-        playDevCardText = self.font_button.render("PLAY DEV CARD", False, (0,0,0))
+        playDevCardText = self.font_button.render("USE DEV C.", False, (0,0,0))
 
         self.rollDice_button = pygame.Rect(20, 10, 80, 40)
         self.buildRoad_button = pygame.Rect(20, 70, 80, 40)
@@ -122,13 +121,13 @@ class catanGameView():
         self.playDevCard_button = pygame.Rect(20, 270, 80, 40)
         self.endTurn_button = pygame.Rect(20, 330, 80, 40)
 
-        pygame.draw.rect(self.screen, pygame.Color('darkgreen'), self.rollDice_button) 
-        pygame.draw.rect(self.screen, pygame.Color('gray33'), self.buildRoad_button) 
-        pygame.draw.rect(self.screen, pygame.Color('gray33'), self.buildSettlement_button) 
-        pygame.draw.rect(self.screen, pygame.Color('gray33'), self.buildCity_button)
-        pygame.draw.rect(self.screen, pygame.Color('gray33'), self.devCard_button)
-        pygame.draw.rect(self.screen, pygame.Color('gray33'), self.playDevCard_button) 
-        pygame.draw.rect(self.screen, pygame.Color('burlywood'), self.endTurn_button) 
+        pygame.draw.rect(self.screen, pygame.Color('white'), self.rollDice_button) 
+        pygame.draw.rect(self.screen, pygame.Color('burlywood'), self.buildRoad_button) 
+        pygame.draw.rect(self.screen, pygame.Color('burlywood'), self.buildSettlement_button) 
+        pygame.draw.rect(self.screen, pygame.Color('burlywood'), self.buildCity_button)
+        pygame.draw.rect(self.screen, pygame.Color('burlywood'), self.devCard_button)
+        pygame.draw.rect(self.screen, pygame.Color('burlywood'), self.playDevCard_button) 
+        pygame.draw.rect(self.screen, pygame.Color('red'), self.endTurn_button) 
 
         self.screen.blit(diceRollText,(30, 20)) 
         self.screen.blit(buildRoadText,(30,80)) 
@@ -136,9 +135,7 @@ class catanGameView():
         self.screen.blit(buildCityText, (30,180))
         self.screen.blit(devCardText, (30,230))
         self.screen.blit(playDevCardText, (30,280))
-        self.screen.blit(endTurnText,(30,340))
-
-
+        self.screen.blit(endTurnText,(30,340))"""
 
     #Function to display robber
     def displayRobber(self):
@@ -158,7 +155,7 @@ class catanGameView():
     def displayGameScreen(self):
         #First display all initial hexes and regular buttons
         self.displayInitialBoard()
-        self.displayGameButtons()
+        #self.displayGameButtons()
         self.displayRobber()
 
         #Loop through and display all existing buildings from players build graphs
@@ -176,6 +173,8 @@ class catanGameView():
         return
         #TO-DO Add screens for trades
 
+    def quitGameScreen(self):
+        pygame.display.quit()
 
     #Function to display dice roll
     def displayDiceRoll(self, diceNums):
@@ -183,8 +182,9 @@ class catanGameView():
         pygame.draw.rect(self.screen, pygame.Color('royalblue2'), (100, 20, 50, 50)) #blue background
         diceNum = self.font_diceRoll.render(str(diceNums), False, (0,0,0))
         self.screen.blit(diceNum,(110, 20)) 
-        
-        return None
+        pygame.display.update()
+
+        return
 
     
     def buildRoad_display(self, currentPlayer, roadsPossibleDict):
