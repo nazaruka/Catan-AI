@@ -1,5 +1,6 @@
 #Karan Vombatkere
 #Settlers of Catan, 2020
+# Modified by Alex Nazaruk, 2021
 
 # #Imports
 from AIGame import *
